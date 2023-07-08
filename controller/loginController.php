@@ -1,39 +1,44 @@
 <?php
 
-  # Leemos las variables enviadas mediante Ajax
-  $user = $_POST['user_php'];
-  $clave = $_POST['clave_php'];
+// Leemos las variables enviadas mediante Ajax
+$user = $_POST['user_php'];
+$clave = $_POST['clave_php'];
 
-  # Verificamos que los campos no esten vacios, el chiste de este if es que si almenos una variable (o campo) esta vacio mostrara error_1
-  if(empty($user) || empty($clave)){
+// Verificamos que los campos no estén vacíos
+if(empty($user) || empty($clave)){
+  // Mostramos el mensaje de error
+  echo 'error_1';
+} else {
+  // Realizamos cualquier lógica adicional que necesites aquí
+  // Por ejemplo, puedes verificar las credenciales en un archivo de texto plano o en una base de datos
 
-    # mostramos la respuesta de php (echo)
-    echo 'error_1';
+  // Ejemplo: Verificar las credenciales en un archivo de texto plano
+  $archivo = './db/archivo.txt';
+  $credenciales_validas = false;
+  $handle = fopen($archivo, 'r');
+  if ($handle) {
+    while (($line = fgets($handle)) !== false) {
+      $line = trim($line);
+      $credentials = explode(',', $line);
+      $stored_username = $credentials[0];
+      $stored_password = $credentials[1];
 
-  } else {
-
-    /*
-       Si tu usuario require de una validacion de email,
-       es decir que contenga @ y .com, .es etc.
-       habilita las lineas 21, 32, 33 y 34
-    */
-
-    // if(filter_var($user, FILTER_VALIDATE_EMAIL)){
-
-    # Incluimos la clase usuario
-    require_once('../model/usuario.php');
-
-    # Creamos un objeto de la clase usuario
-    $usuario = new Usuario();
-
-    # Llamamos al metodo login para validar los datos en la base de datos
-    $usuario -> login($user, $clave);
-
-    /* }else{
-      echo 'error_2';
-    } */
-
+      // Verificar si las credenciales coinciden
+      if ($user === $stored_username && $clave === $stored_password) {
+        $credenciales_validas = true;
+        break;
+      }
+    }
+    fclose($handle);
   }
 
+  if ($credenciales_validas) {
+    // Las credenciales son válidas, muestra un mensaje de éxito
+    echo 'success';
+  } else {
+    // Las credenciales son inválidas, muestra un mensaje de error
+    echo 'error_2';
+  }
+}
 
 ?>
