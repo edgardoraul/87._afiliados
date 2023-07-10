@@ -23,7 +23,7 @@ function obtenerUsuarios() {
 // Verificar si el usuario ya ha iniciado sesión
 if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true){
     // Redirigir al usuario a la página de ingreso correcto
-    header("Location: index.php#ingreso_correcto");
+    header("Location: index.php");
     exit;
 }
 
@@ -41,7 +41,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $_SESSION['usuario'] = $usuario;
 
             // Redirigir al usuario a la página de ingreso correcto
-            header("Location: index.php");
+            header("Location: ingreso_correcto.php");
             exit;
         }
     }
@@ -73,33 +73,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			</header>
 
 		</div>
-		<div class="row justify-content-center">
-		<div class="col-md-6 mt-5">
-                <?php if(isset($error)){ ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?php echo $error; ?>
-                    </div>
-                <?php } ?>
+	</div>
 
-                <h2>Iniciar Sesión</h2>
-                <form method="POST" action="">
-                    <div class="mb-3">
-                        <label for="usuario" class="form-label">Usuario</label>
-                        <input type="number" class="form-control" id="usuario" name="usuario" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="contraseña" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="contraseña" name="contraseña" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="container hidden-section" id="ingreso_correcto">
+    <div class="container hidden-section">
         <div class="row justify-content-center">
             <div class="col-md-6 mt-5 text-center">
                 <h3>Bienvenido <?php echo $_SESSION['usuario']['nombre']; ?></h3>
